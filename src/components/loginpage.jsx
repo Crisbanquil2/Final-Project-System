@@ -185,8 +185,8 @@ export default function LoginPage() {
                   <circle cx="32" cy="28" r="4" stroke="currentColor" strokeWidth="2" fill="none"/>
                 </svg>
               </div>
-              <span className="login-logo-brand">MEOW</span>
-              <p className="login-logo-tagline">Sign in to your account</p>
+              <span className="login-logo-brand">State University</span>
+              <p className="login-logo-tagline">Excellence in Every Bound.</p>
             </div>
 
             <div className="login-modal-form-wrap">
