@@ -57,12 +57,12 @@
 }
 
 .nav-item:hover {
-  background: var(--color-bg-elevated);
+  background: transparent;
   color: var(--text-primary);
 }
 
 .nav-item.active {
-  background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(20, 184, 166, 0.08));
+  background: transparent;
   color: var(--color-primary-light);
   border: 1px solid rgba(20, 184, 166, 0.25);
 }

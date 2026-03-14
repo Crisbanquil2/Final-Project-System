@@ -67,7 +67,7 @@
 }
 
 .login-header-btn:hover {
-  background: #243b5c;
+  background: #2d4362;
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
@@ -98,10 +98,10 @@
 .login-modal {
   width: 100%;
   max-width: 500px;
-  background: rgba(247, 247, 247, 0.663);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(25px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(30, 47, 53, 0.332);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(130, 157, 198, 0.5);
   border-radius: 24px;
   box-shadow:
     0 25px 50px -12px rgba(0, 0, 0, 0.3),
@@ -164,7 +164,7 @@
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #2c2c2c;
+  color: #e5e7eb;
   text-align: center;
 }
 
@@ -183,7 +183,7 @@
   display: block;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #3d3d3d;
+  color: #e5e7eb;
   margin-bottom: 0.4rem;
   text-align: left;
 }
@@ -197,21 +197,58 @@
 .login-input-wrap input {
   width: 100%;
   padding: 0.6rem 2.5rem 0.6rem 0;
-  font-size: 1rem;
-  color: #2c2c2c;
-  background: transparent;
+  font-size: 0.95rem;
+  color: #e5e7eb;
+  background: transparent !important;
+  background-color: transparent !important;
   border: none;
-  border-bottom: 1px solid #4a4a4a;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.6);
   outline: none;
   transition: border-color 0.25s ease;
 }
 
+.login-input-wrap input:hover,
+.login-input-wrap input:focus {
+  background: transparent !important;
+  background-color: transparent !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+/* Autofill: exact modal background so walang visible na kulay (email/password autofill) */
+.login-input-wrap input:-webkit-autofill,
+.login-input-wrap input:-webkit-autofill:hover,
+.login-input-wrap input:-webkit-autofill:focus,
+.login-input-wrap input:-webkit-autofill:active,
+.login-input-wrap input:autofill,
+.login-input-wrap input:autofill:hover,
+.login-input-wrap input:autofill:focus,
+.login-input-wrap input:autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px rgba(30, 47, 53, 0.34) inset !important;
+  box-shadow: 0 0 0 1000px rgba(30, 47, 53, 0.34) inset !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  -webkit-text-fill-color: #e5e7eb !important;
+  caret-color: #e5e7eb;
+  transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s !important;
+}
+@keyframes loginAutofillFix {
+  to {
+    -webkit-box-shadow: 0 0 0 1000px rgba(30, 47, 53, 0.34) inset !important;
+    box-shadow: 0 0 0 1000px rgba(30, 47, 53, 0.34) inset !important;
+    -webkit-text-fill-color: #e5e7eb !important;
+  }
+}
+.login-input-wrap input:-webkit-autofill {
+  animation: loginAutofillFix 0.1s 0.5s forwards;
+}
+
 .login-input-wrap input::placeholder {
-  color: #5a5a5a;
+  color: rgba(122, 138, 167, 0.8);
 }
 
 .login-input-wrap input:focus {
-  border-bottom-color: #2c2c2c;
+  border-bottom-color: #3da4d0;
 }
 
 .login-input-icon {
@@ -219,7 +256,7 @@
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  color: #4a4a4a;
+  color: rgba(129, 152, 182, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -229,7 +266,7 @@
 
 .login-input-wrap input:focus + .login-input-icon,
 .login-input-wrap:focus-within .login-input-icon {
-  color: #2c2c2c;
+  color: #38bdf8;
 }
 
 .login-options {
@@ -247,7 +284,7 @@
   gap: 0.5rem;
   cursor: pointer;
   font-size: 0.9rem;
-  color: #3d3d3d;
+  color: #e5e7eb;
   user-select: none;
 }
 
@@ -260,14 +297,14 @@
 
 .login-forgot {
   font-size: 0.9rem;
-  color: #3d3d3d;
+  color: #38bdf8;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease, text-decoration 0.2s ease;
 }
 
 .login-forgot:hover {
-  color: #2c2c2c;
+  color: #0ea5e9;
   text-decoration: underline;
 }
 
@@ -278,7 +315,7 @@
   font-size: 1rem;
   font-weight: 600;
   color: #fff;
-  background: #4c4d51;
+  background: #38bdf8;
   border: none;
   border-radius: 12px;
   cursor: pointer;
@@ -286,7 +323,7 @@
 }
 
 .login-submit:hover {
-  background: #1e242e;
+  background: #0ea5e9;
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
@@ -299,19 +336,36 @@
   text-align: center;
   margin: 1.25rem 0 0;
   font-size: 0.95rem;
-  color: #3d3d3d;
+  color: #e5e7eb;
 }
 
-.login-register a {
-  color: #3d3d3d;
+.login-link-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: #38bdf8;
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 2px;
+  cursor: pointer;
   transition: color 0.2s ease;
 }
 
-.login-register a:hover {
-  color: #2c2c2c;
+.login-link-button:hover {
+  color: #0ea5e9;
+}
+
+a.login-link-button {
+  font: inherit;
+}
+
+.login-reset-title {
+  margin: 0 0 1.25rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #e5e7eb;
+  text-align: center;
 }
 
 
@@ -321,15 +375,15 @@
   align-items: center;
   justify-content: center;
   padding: 2rem 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.6));
+  border-right: 1px solid rgba(92, 113, 144, 0.9);
   min-width: 140px;
 }
 
 .login-logo-icon {
   width: 64px;
   height: 64px;
-  color: #2c2c2c;
+  color: #e5e7eb;
   margin-bottom: 0.75rem;
 }
 
@@ -341,14 +395,14 @@
 .login-logo-brand {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #2c2c2c;
+  color: #e5e7eb;
   letter-spacing: 0.05em;
   margin-bottom: 0.25rem;
 }
 
 .login-logo-tagline {
   font-size: 0.75rem;
-  color: #5a5a5a;
+  color: #9ca3af;
   margin: 0;
   text-align: center;
 }
@@ -359,3 +413,15 @@
   display: flex;
   flex-direction: column;
 }
+
+.login-form input[type='email'],
+.login-form input[type='password'],
+.login-form input[type='text'] {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.6) !important;
+  box-shadow: none !important;
+}
+

@@ -1,17 +1,21 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import './Sidebar.css';
+import { useAuth } from '../auth/AuthContext';
 
 export default function Sidebar() {
-  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const navItems = [
     { to: '/dashboard', label: 'Dashboard', icon: '▢' },
     { to: '/programs', label: 'Program Offerings', icon: '◉' },
     { to: '/subjects', label: 'Subject Offerings', icon: '◇' },
+    { to: '/students', label: 'Students Enrolled', icon: '▣' },
+    { to: '/courses-offered', label: 'Courses Offered', icon: '▦' },
+    { to: '/school-days', label: 'School Days', icon: '▤' },
   ];
 
   const handleLogout = () => {
-    navigate('/');
+    logout();
   };
 
   return (

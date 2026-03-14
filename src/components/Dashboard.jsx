@@ -1,10 +1,70 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { programs, subjects } from '../data/mockData';
+import { get } from '../services/api';
+import WeatherWidget from './weather/WeatherWidget';
+import EnrollmentChart from './dashboard/EnrollmentChart';
+import CourseDistributionChart from './dashboard/CourseDistributionChart';
+import AttendanceChart from './dashboard/AttendanceChart';
+import LoadingSpinner from './common/LoadingSpinner';
 import './Dashboard.css';
 
 export default function Dashboard() {
+  const [enrollmentData, setEnrollmentData] = useState([]);
+  const [courseDistData, setCourseDistData] = useState([]);
+  const [attendanceData, setAttendanceData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    let isMounted = true;
+    const load = async () => {
+      setLoading(true);
+      setError('');
+      try {
+        const [enrollmentJson, coursesJson, attendanceJson] = await Promise.all([
+          get('/dashboard/enrollment'),
+          get('/dashboard/courses'),
+          get('/dashboard/attendance'),
+        ]);
+
+        if (!isMounted) return;
+
+        setEnrollmentData(
+          enrollmentJson.map((item) => ({
+            month: item.month,
+            total: Number(item.total),
+          })),
+        );
+
+        setCourseDistData(
+          coursesJson.map((item) => ({
+            name: item.name,
+            value: Number(item.total),
+          })),
+        );
+
+        setAttendanceData(
+          attendanceJson.map((item) => ({
+            date: item.date,
+            present: Number(item.present_students ?? 0),
+            absent: Number(item.absent_students ?? 0),
+          })),
+        );
+      } catch (err) {
+        if (!isMounted) return;
+        setError(err.message || 'Something went wrong while loading data.');
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    load();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const stats = useMemo(() => {
     const activePrograms = programs.filter((p) => p.status === 'active').length;
     const inactivePrograms = programs.length - activePrograms;
@@ -46,10 +106,14 @@ export default function Dashboard() {
     <div className="dashboard">
       <header className="page-header">
         <h1>Dashboard</h1>
-        <p className="page-subtitle">Overview of programs and subject offerings</p>
+        <p className="page-subtitle">
+          Overview of enrollment, courses, and attendance
+        </p>
       </header>
 
-      {/* Stat Cards */}
+      {loading && <LoadingSpinner label="Loading dashboard data..." />}
+      {error && !loading && <p className="page-status page-status-error">{error}</p>}
+
       <div className="stats-grid">
         <StatCard
           title="Total Programs"
@@ -78,60 +142,19 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* Charts Row */}
       <div className="charts-row">
-        <div className="chart-card" style={{ animationDelay: '0.2s' }}>
-          <h3>Subjects by Semester/Term</h3>
-          <div className="chart-inner">
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={chartData}>
-                <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} />
-                <YAxis stroke="#94a3b8" fontSize={12} />
-                <Tooltip
-                  contentStyle={{
-                    background: 'var(--color-bg-elevated)',
-                    border: '1px solid var(--color-border)',
-                    borderRadius: 'var(--radius-md)',
-                  }}
-                />
-                <Bar dataKey="value" fill="#14b8a6" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-        <div className="chart-card" style={{ animationDelay: '0.25s' }}>
-          <h3>Program Status</h3>
-          <div className="chart-inner">
-            <ResponsiveContainer width="100%" height={220}>
-              <PieChart>
-                <Pie
-                  data={statusChartData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={50}
-                  outerRadius={80}
-                  paddingAngle={4}
-                  dataKey="value"
-                >
-                  {statusChartData.map((entry, i) => (
-                    <Cell key={i} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{
-                    background: 'var(--color-bg-elevated)',
-                    border: '1px solid var(--color-border)',
-                    borderRadius: 'var(--radius-md)',
-                  }}
-                />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+        <WeatherWidget />
       </div>
 
-      {/* Recently Added */}
+      <div className="charts-row">
+        <EnrollmentChart data={enrollmentData} />
+        <CourseDistributionChart data={courseDistData} />
+      </div>
+
+      <div className="charts-row">
+        <AttendanceChart data={attendanceData} />
+      </div>
+
       <div className="recent-section">
         <div className="recent-card" style={{ animationDelay: '0.3s' }}>
           <div className="recent-header">
