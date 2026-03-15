@@ -22,7 +22,12 @@ async function request(path, options = {}) {
     ...options,
   };
 
-  const response = await fetch(url, finalOptions);
+  let response;
+  try {
+    response = await fetch(url, finalOptions);
+  } catch (networkError) {
+    throw new Error('Cannot connect to server. Make sure the backend is running (e.g. php artisan serve in it15-backend).');
+  }
 
   if (!response.ok) {
     let message = `Request failed with status ${response.status}`;
@@ -32,6 +37,11 @@ async function request(path, options = {}) {
         message = data.message;
       }
     } catch {}
+    if (response.status === 401) {
+      localStorage.removeItem('auth');
+      window.dispatchEvent(new Event('auth:unauthorized'));
+      message = 'Session expired or invalid. Please log in again.';
+    }
     throw new Error(message);
   }
 

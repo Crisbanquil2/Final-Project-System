@@ -68,7 +68,20 @@ For production: `npm run build` then `npm run preview`.
 
 **Frontend (optional):**
 
-- `VITE_API_BASE_URL` — API base URL (default: `http://localhost:8000/api`). Set only if the API runs elsewhere.
+- `VITE_API_BASE_URL` — API base URL (default: `http://localhost:8000/api`). Set only if the API runs elsewhere. Create a `.env` in the project root (copy from `.env.example`) if the app shows "Cannot connect to server."
+
+### Troubleshooting: "Unauthenticated" or cannot login
+
+1. **Backend must be running.** In a terminal:
+   ```bash
+   cd it15-backend
+   php artisan serve
+   ```
+   Keep this running. The API must be at `http://localhost:8000` (frontend calls `http://localhost:8000/api`).
+
+2. **Frontend port:** If you use a different port (e.g. 5174), CORS already allows it. If the API is on a different host/port, set `VITE_API_BASE_URL` in the project root `.env` (e.g. `VITE_API_BASE_URL=http://localhost:8000/api`).
+
+3. **Session expired:** If you see "Unauthenticated" or "Session expired or invalid", the app will redirect you to the login page. Log in again. To clear old data: DevTools → Application → Local Storage → clear `auth` for your site.
 
 ---
 
